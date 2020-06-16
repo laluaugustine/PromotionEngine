@@ -16,8 +16,8 @@ namespace PromotionEngineTests
             //arrange
             IPromotionEngine promotionEngine = new PromotionEngine();
             var cartItems = new List<CartItem> {
-                new CartItem(){UnitId="A",UnitCount=1,UnitPrice=50 },
-                new CartItem(){UnitId="B",UnitCount=1,UnitPrice=30 },
+                new CartItem(){UnitId="A",UnitCount=5,UnitPrice=50 },
+                new CartItem(){UnitId="B",UnitCount=5,UnitPrice=30 },
                 new CartItem(){UnitId="C",UnitCount=1,UnitPrice=20 },
             };
             var promotions = new List<Promotion> {
