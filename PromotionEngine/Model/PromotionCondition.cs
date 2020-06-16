@@ -8,7 +8,6 @@ namespace PromotionEngineSystem.Model
 {
     public class PromotionCondition
     {
-        public int PromotionId { get; set; }
         public string Item { get; set; }
         public int CountRequired { get; set; }
 
