@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace PromotionEngineSystem.Model
 {
-    public class CartItem
+    public class PromotionCondition
     {
-        public string UnitId { get; set; }
-        public int UnitCount { get; set; }
-        public int UnitPrice { get; set; }
+        public int PromotionId { get; set; }
+        public string Item { get; set; }
+        public int CountRequired { get; set; }
+
     }
 }
