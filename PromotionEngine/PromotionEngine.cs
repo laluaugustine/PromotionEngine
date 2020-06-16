@@ -28,7 +28,8 @@ namespace PromotionEngineSystem
                 var itemsPresent = cartItems.Where(a => promotionItems.Contains(a.UnitId)).ToList();
                 if (itemsPresent.Count == promotionItems.Count)
                 {
-                    
+                    bool isConditionSatisfied = false;
+                    int counter = 1;
                     foreach (var condition in promotion.Conditions)
                     {
                         var minCount = condition.CountRequired;
@@ -36,19 +37,41 @@ namespace PromotionEngineSystem
                         if (itemsCount % minCount == 0)
                         {
                             var newPrice=(itemsCount / minCount) * promotion.PromotionPrice;
-                            cartItems.Where(a => a.UnitId == condition.Item).FirstOrDefault().UnitPrice = newPrice;
+                            if (promotion.Conditions.Count > 1 && counter != (promotion.Conditions.Count )) {
+                                isConditionSatisfied = true;
+                                counter++;
+                            }
+                            else if (promotion.Conditions.Count == 1 || (isConditionSatisfied && counter == promotion.Conditions.Count))
+                            {
+                               
+                                cartItems.Where(a => promotionItems.Contains(a.UnitId)).ToList().ForEach(a => a.UnitPrice = 0);
+                                cartItems.Where(a => a.UnitId == condition.Item).FirstOrDefault().UnitPrice = newPrice;
+                            }
+
+                            
                         }
                         else
                         {
                             var difference = itemsCount % minCount;
                             var newPrice = (difference) * itemsPresent.FirstOrDefault().UnitPrice;
                             newPrice += ((itemsCount - difference)/minCount) * promotion.PromotionPrice;
-                            cartItems.Where(a => a.UnitId == condition.Item).FirstOrDefault().UnitPrice = newPrice;
+                            if (promotion.Conditions.Count > 1)
+                            {
+                                isConditionSatisfied = true;
+                                counter++;
+                            }
+                            else if (promotion.Conditions.Count == 1 || (isConditionSatisfied && counter == promotion.Conditions.Count))
+                            {
+                                cartItems.Where(a => a.UnitId == condition.Item).FirstOrDefault().UnitPrice = newPrice;
+                            }
+                            else if (promotion.Conditions.Count == 1 || (isConditionSatisfied && counter == promotion.Conditions.Count+1))
+                            {
+                                cartItems.Where(a => promotionItems.Contains(a.UnitId)).ToList();
+                                cartItems.ForEach(a => a.UnitPrice = 0);
+                                cartItems.Where(a => a.UnitId == condition.Item).FirstOrDefault().UnitPrice = newPrice;
+                            }
                         }
-
-
                     }
-                  //  model.FinalizedItems.Add(new CartItem {UnitId=itemsPresent. })
                 }
             }
             return cartItems.Sum(a=>a.UnitPrice);
